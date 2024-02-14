@@ -83,11 +83,12 @@ def prosesData(pemilu,ddesa):
 ddesa=getDesa(dpemilu)
 dt = prosesData(dpemilu, ddesa)
 
-# print(dt[3][5])
+# print(dt[0][10])
 # print(pd.DataFrame(dt[0])[['totSuara','TaliwangTot','KertasariTot','DasanTot' ]])
 
 dpartai = []
 dtop1=[]
+dsuaraPartai=[]
 for v in dt.index:
     ind = 0
     totPartai = 0
@@ -97,6 +98,11 @@ for v in dt.index:
             totSuara = v1['totSuara']
             ind = i1
         totPartai+=v1['totSuara']
+        if(str(v1['nm']).lower().replace(" ","")=="suarapartai"):
+            dsuaraPartai.append({
+                'Partai':v,
+                'Total Suara':v1['totSuara']
+            })
 
     dtop1.append({
         'Partai':v,
@@ -182,7 +188,7 @@ st.markdown(style, unsafe_allow_html=True)
 
 with st.container():
     st.markdown("<div class='container1'></div>", unsafe_allow_html=True)
-    st.header(':sparkles:. Rangkuman Suara Partai')  
+    st.header(':sparkles:. Total Suara di Partai')  
 
     dgroup = pd.DataFrame(dpartai).groupby(by="partai").agg({
         'total':'sum'
@@ -193,6 +199,10 @@ with st.container():
     with col22:
         st.bar_chart(dgroup)
 
+with st.container():
+    st.markdown("<div class='container1'></div>", unsafe_allow_html=True)
+    st.header(':sparkles:. Suara Partai, (bukan caleg)')  
+    st.table(dsuaraPartai) 
 
 
 container1 = st.container()
